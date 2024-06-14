@@ -5,6 +5,7 @@
 # Hamster Kombat Bot
 
 Automated clicker to collect coins in the Telegram game Hamster Kombat.
+Now you can sleep at night without any FOMO (fear of missing opportunities).
 
 ## Dependencies
 
@@ -37,6 +38,7 @@ It does not:
 - send your data anywhere
 - upgrade your cards, or in any other way spend your balance
 - earn your daily rewards, or fulfill any tasks
+
 If you don't believe me, here is the code. Check it ;)
 
 ## Disclaimer
