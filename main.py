@@ -81,7 +81,6 @@ class HamsterApp:
     def get_energy(self):
         el_text = self.energy_element.text
         current_energy, max_energy = (int(n) for n in el_text.split(' / '))
-        print(f'{current_energy=}')
         return current_energy, max_energy
 
     def check_refill_timer(self):
