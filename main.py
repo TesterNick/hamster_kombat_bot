@@ -26,14 +26,14 @@ class HamsterApp:
 
     @property
     def boost_button(self):
-        xpath = ('/*/android.view.View[1]/android.view.View[3]'
+        xpath = ('/*/android.view.View[1]/android.view.View[7]'
                  '/android.view.View/android.widget.TextView')
         return self.root.find_element(by=AppiumBy.XPATH, value=xpath)
 
     @property
     def energy_element(self):
         xpath = ('/*/android.view.View[1]'
-                 '/android.view.View[3]/android.widget.TextView')
+                 '/android.view.View[7]/android.widget.TextView')
         return self.root.find_element(by=AppiumBy.XPATH, value=xpath)
 
     @property
@@ -44,7 +44,7 @@ class HamsterApp:
 
     @property
     def hamster_button(self):
-        xpath = ('/*/android.view.View[1]/android.view.View[3]'
+        xpath = ('/*/android.view.View[1]/android.view.View[7]'
                  '/android.widget.Button')
         return self.root.find_element(by=AppiumBy.XPATH, value=xpath)
 
