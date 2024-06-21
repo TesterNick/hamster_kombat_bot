@@ -169,7 +169,6 @@ class MainApp:
         self.port = None
         self.capabilities = {
             'platformName': 'Android',
-            'automationName': 'uiautomator2',
             'deviceName': 'Android',
             'appPackage': 'org.telegram.messenger',
             'appActivity': '.DefaultIcon',
