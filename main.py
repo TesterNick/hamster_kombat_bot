@@ -31,13 +31,6 @@ class HamsterApp:
         return self.root.find_element(by=AppiumBy.XPATH, value=xpath)
 
     @property
-    def earn_per_tap_element(self):
-        xpath = ('/*/android.view.View[1]/android.widget.ListView'
-                 '/android.view.View/android.view.View[1]'
-                 '/*/android.widget.TextView')
-        return self.root.find_element(by=AppiumBy.XPATH, value=xpath)
-
-    @property
     def energy_element(self):
         xpath = ('/*/android.view.View[1]'
                  '/android.view.View[3]/android.widget.TextView')
@@ -91,9 +84,6 @@ class HamsterApp:
         print(f'{current_energy=}')
         return current_energy, max_energy
 
-    def get_earn_per_tap(self):
-        return int(self.earn_per_tap_element.text)
-
     def check_refill_timer(self):
         xpath = '/*/android.view.View/android.widget.TextView'
         try:
@@ -121,11 +111,11 @@ class HamsterApp:
         low_y = r['y'] + r['height'] // 4
         upp_y = r['y'] + r['height'] // 4 * 3
         cur_energy, max_energy = self.get_energy()
-        max_taps = cur_energy // (self.get_earn_per_tap() - 2)
+        print(f'current_energy: {cur_energy}')
         r = random.randint
-        taps = [(r(low_x, upp_x), r(low_y, upp_y)) for _ in range(max_taps)]
-        for i in range(0, len(taps), 5):
-            self.driver.tap(taps[i: i + 5], 10)
+        while self.get_energy()[0] > 10:
+            taps = [(r(low_x, upp_x), r(low_y, upp_y)) for _ in range(5)]
+            self.driver.tap(taps)
         return max_energy
 
     def wait_for_loading(self, timeout=30):
