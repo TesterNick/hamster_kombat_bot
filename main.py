@@ -82,7 +82,7 @@ class MainApp:
         sleep_time_by_energy = max_energy * 0.3
         timeout = sleep_time_by_energy if sleep_time_by_energy < 3599 else 3599
         end_time = time.time() + timeout
-        logger.debug(f'{max_energy=}. Sleeping for {timeout} s')
+        logger.debug(f'{max_energy=}. Sleeping for {int(timeout)} s')
         while time.time() < end_time:
             rest_time = datetime.datetime.fromtimestamp(end_time - time.time())
             print(f'Next run in {rest_time.strftime('%M:%S')}', end='\r')
