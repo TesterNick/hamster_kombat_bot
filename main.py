@@ -36,7 +36,7 @@ class MainApp:
         logger.debug('Getting Appium server url')
         if not self._appium_server_url:
             self._appium_server_url = f'http://{self.host}:{self.port}'
-        logger.debug(f'Return ur: {self._appium_server_url}')
+        logger.debug(f'Return url: {self._appium_server_url}')
         return self._appium_server_url
 
     def __enter__(self):
