@@ -80,7 +80,7 @@ class MainApp:
     @staticmethod
     def sleep_with_timer(max_energy):
         sleep_time_by_energy = max_energy * 0.3
-        timeout = sleep_time_by_energy if sleep_time_by_energy < 3600 else 3600
+        timeout = sleep_time_by_energy if sleep_time_by_energy < 3599 else 3599
         end_time = time.time() + timeout
         logger.debug(f'{max_energy=}. Sleeping for {timeout} s')
         while time.time() < end_time:
