@@ -1,5 +1,6 @@
 import configparser
 import datetime
+import logging
 import time
 
 from appium import webdriver
@@ -32,12 +33,15 @@ class MainApp:
 
     @property
     def appium_server_url(self):
+        logger.debug('Getting Appium server url')
         if not self._appium_server_url:
             self._appium_server_url = f'http://{self.host}:{self.port}'
+        logger.debug(f'Return ur: {self._appium_server_url}')
         return self._appium_server_url
 
     def __enter__(self):
         print('Running Appium server', end='\r')
+        logger.info('Running Appium server')
         self.service = AppiumService()
         self.service.start(args=['--address', self.host, '-p', self.port],
                            timeout_ms=20000,)
@@ -47,9 +51,12 @@ class MainApp:
             self.driver.unlock()
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        logger.debug('Locking the device')
         self.driver.lock()
         if self.driver:
+            logger.debug('Quitting driver')
             self.driver.quit()
+        logger.debug('Stopping the Appium service')
         self.service.stop()
 
     def parse_config(self):
@@ -66,17 +73,22 @@ class MainApp:
             self.capabilities['unlockType'] = unlock_type
             self.capabilities['unlockKey'] = pin
             pass
+        config = {section: {k: v for k, v in cfg[section].items()}
+                  for section in cfg.sections()}
+        logger.debug(f'Config: {config}')
 
     @staticmethod
     def sleep_with_timer(max_energy):
         sleep_time_by_energy = max_energy * 0.3
         timeout = sleep_time_by_energy if sleep_time_by_energy < 3600 else 3600
         end_time = time.time() + timeout
+        logger.debug(f'{max_energy=}. Sleeping for {timeout} s')
         while time.time() < end_time:
             rest_time = datetime.datetime.fromtimestamp(end_time - time.time())
             print(f'Next run in {rest_time.strftime('%M:%S')}', end='\r')
             time.sleep(1)
         print('Running coin gathering...', end='\r')
+        logger.info('Running coin gathering')
 
     def tap_coins(self):
         hamster = HamsterApp(self.driver)
@@ -84,6 +96,7 @@ class MainApp:
             hamster.thank_you_button.click()
         except NoSuchElementException:
             print('No "Thank you" button found')
+            logger.error('No "Thank you" button found')
         max_energy = hamster.collect_coins()
         if hamster.refill_energy():
             hamster.collect_coins()
@@ -91,6 +104,10 @@ class MainApp:
 
 
 if __name__ == '__main__':
+    logger = logging.getLogger()
+    log_format = '%(asctime)s %(name)s %(levelname)s:\n    %(message)s'
+    logging.basicConfig(format=log_format, filename='hamster_bot.log',
+                        encoding='utf-8', level=logging.NOTSET)
     app = MainApp()
     while True:
         with app:

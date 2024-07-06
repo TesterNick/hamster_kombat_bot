@@ -1,3 +1,4 @@
+import logging
 import random
 import time
 
@@ -6,10 +7,14 @@ from appium.webdriver.common.appiumby import AppiumBy
 from selenium.common.exceptions import NoSuchElementException
 
 
+logger = logging.getLogger()
+
+
 class HamsterApp:
 
     def __init__(self, driver: webdriver.Remote):
         print('Running Hamster', end='\r')
+        logger.info('Running Hamster')
         self.driver = driver
         self.url = "https://t.me/hamsteR_kombat_bot/start"
         self.root = None
@@ -23,84 +28,105 @@ class HamsterApp:
 
     @property
     def boost_button(self):
+        logger.debug('Getting Boost button')
         xpath = ('/*/android.view.View[1]/android.view.View[7]'
                  '/android.view.View/android.widget.TextView')
         return self.root.find_element(by=AppiumBy.XPATH, value=xpath)
 
     @property
     def energy_element(self):
+        logger.debug('Getting Energy element')
         xpath = ('/*/android.view.View[1]'
                  '/android.view.View[7]/android.widget.TextView')
         return self.root.find_element(by=AppiumBy.XPATH, value=xpath)
 
     @property
     def go_ahead_button(self):
+        logger.debug('Getting Go Ahead button')
         xpath = ('/*/android.view.View[3]/android.view.View'
                  '/android.view.View[2]/android.widget.Button')
         return self.root.find_element(by=AppiumBy.XPATH, value=xpath)
 
     @property
     def hamster_button(self):
+        logger.debug('Getting Hamster button')
         xpath = ('/*/android.view.View[1]/android.view.View[7]'
                  '/android.widget.Button')
         return self.root.find_element(by=AppiumBy.XPATH, value=xpath)
 
     @property
     def error_message(self):
+        logger.debug('Looking for error messages')
         xpath = '//*/android.widget.TextView[@text="Ooops, try again please"]'
         return self.driver.find_element(by=AppiumBy.XPATH, value=xpath)
 
     @property
     def loading_screen(self):
+        logger.debug('Checking the loading screen')
         xpath = '//*/android.widget.Image[@text="Loading screen"]'
         try:
             return self.driver.find_element(by=AppiumBy.XPATH, value=xpath)
         except NoSuchElementException:
+            logger.debug('No loading screen found')
             return None
 
     @property
     def refill_energy_element(self):
+        logger.debug('Getting refill energy button')
         xpath = '/*/android.view.View[1]/android.view.View[2]'
         return self.root.find_element(by=AppiumBy.XPATH, value=xpath)
 
     @property
     def thank_you_button(self):
+        logger.debug('Getting Thank You button')
         xpath = ('/*/android.view.View[3]/android.view.View'
                  '/android.view.View[2]/android.widget.Button')
         return self.root.find_element(by=AppiumBy.XPATH, value=xpath)
 
     def get_available_refills(self):
+        logger.debug('Getting available refills')
         xpath = '/*/android.widget.TextView[2]'
         parent = self.refill_energy_element
-        refills = parent.find_element(by=AppiumBy.XPATH, value=xpath)
-        return int(refills.text[0])
+        refills_element = parent.find_element(by=AppiumBy.XPATH, value=xpath)
+        available_refills = int(refills_element.text[0])
+        logger.debug(f'{available_refills=}')
+        return available_refills
 
     def get_energy(self):
+        logger.debug('Getting Energy')
         el_text = self.energy_element.text
         current_energy, max_energy = (int(n) for n in el_text.split(' / '))
+        logger.debug(f'{current_energy=}, {max_energy=}')
         return current_energy, max_energy
 
     def check_refill_timer(self):
+        logger.debug('Getting refill timer')
         xpath = '/*/android.view.View/android.widget.TextView'
         try:
-            self.refill_energy_element.find_element(by=AppiumBy.XPATH,
-                                                    value=xpath)
+            el = self.refill_energy_element.find_element(by=AppiumBy.XPATH,
+                                                         value=xpath)
+            logger.debug(f'Refill timer text: {el.text}')
             return True
         except NoSuchElementException:
+            logger.debug('No refill timer found')
             return False
 
     def check_error_message(self):
         try:
             error = self.error_message
         except NoSuchElementException:
+            logger.debug('No error messages found')
             return False
         else:
             if error.get_attribute('displayed') == 'true':
-                print(f'{error.get_attribute("name")}')
+                error_name = f'{error.get_attribute("name")}'
+                print(error_name)
+                logger.debug(f'Found error: {error_name}')
                 return True
 
     def collect_coins(self):
         print('Collecting coins')
+        logger.info('Collecting coins')
         r = self.hamster_button.rect.copy()
         low_x = r['x'] + r['width'] // 4
         upp_x = r['x'] + r['width'] // 4 * 3
@@ -111,6 +137,7 @@ class HamsterApp:
         r = random.randint
         while self.get_energy()[0] > 10:
             taps = [(r(low_x, upp_x), r(low_y, upp_y)) for _ in range(5)]
+            logger.debug(f'Tapping {taps}')
             self.driver.tap(taps)
         return max_energy
 
@@ -125,6 +152,7 @@ class HamsterApp:
                 self.root = self.driver.find_element(by=AppiumBy.XPATH,
                                                      value=root_path)
             except NoSuchElementException:
+                logger.error('App is not loaded')
                 not_found += 1
                 if not_found == 3:
                     self.load()
