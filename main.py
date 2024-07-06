@@ -53,9 +53,8 @@ class MainApp:
     def __exit__(self, exc_type, exc_val, exc_tb):
         logger.debug('Locking the device')
         self.driver.lock()
-        if self.driver:
-            logger.debug('Quitting driver')
-            self.driver.quit()
+        logger.debug('Quitting driver')
+        self.driver.quit()
         logger.debug('Stopping the Appium service')
         self.service.stop()
 
