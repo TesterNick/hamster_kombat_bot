@@ -47,8 +47,6 @@ class MainApp:
                            timeout_ms=20000,)
         options = UiAutomator2Options().load_capabilities(self.capabilities)
         self.driver = webdriver.Remote(self.appium_server_url, options=options)
-        if self.driver.is_locked():
-            self.driver.unlock()
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         logger.debug('Locking the device')
