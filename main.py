@@ -94,6 +94,7 @@ class MainApp:
         except NoSuchElementException:
             print('No "Thank you" button found')
             logger.error('No "Thank you" button found')
+        hamster.get_tap_coordinates()
         max_energy = hamster.collect_coins()
         if hamster.refill_energy():
             hamster.collect_coins()

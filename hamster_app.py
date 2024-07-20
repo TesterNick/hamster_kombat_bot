@@ -18,7 +18,8 @@ class HamsterApp:
         self.driver = driver
         self.url = "https://t.me/hamsteR_kombat_bot/start"
         self.root = None
-        self._earn_per_tap = None
+        self.earn_per_tap = None
+        self._tap_zone = {'low_x': 0, 'upp_x': 0, 'low_y': 0, 'upp_y': 0}
         self.load()
         tries = 10
         while not self.wait_for_loading() and tries > 0:
@@ -127,19 +128,35 @@ class HamsterApp:
     def collect_coins(self):
         print('Collecting coins')
         logger.info('Collecting coins')
-        r = self.hamster_button.rect.copy()
-        low_x = r['x'] + r['width'] // 4
-        upp_x = r['x'] + r['width'] // 4 * 3
-        low_y = r['y'] + r['height'] // 4
-        upp_y = r['y'] + r['height'] // 4 * 3
         cur_energy, max_energy = self.get_energy()
         print(f'current_energy: {cur_energy}')
-        r = random.randint
-        while self.get_energy()[0] > 10:
-            taps = [(r(low_x, upp_x), r(low_y, upp_y)) for _ in range(5)]
-            logger.debug(f'Tapping {taps}')
-            self.driver.tap(taps)
+        if not self.earn_per_tap:
+            for _ in range(2):
+                self.do_random_tap()
+            energy_after = self.get_energy()[0]
+            self.earn_per_tap = (cur_energy - energy_after) // 10
+            logger.debug(f'{self.earn_per_tap=}')
+            cur_energy = energy_after
+        for _ in range(cur_energy // (self.earn_per_tap - 3) // 5):
+            self.do_random_tap()
         return max_energy
+
+    def do_random_tap(self):
+        r = random.randint
+        low_x = self._tap_zone['low_x']
+        upp_x = self._tap_zone['upp_x']
+        low_y = self._tap_zone['low_y']
+        upp_y = self._tap_zone['upp_y']
+        self.driver.tap([(r(low_x, upp_x), r(low_y, upp_y)) for _ in range(5)])
+
+    def get_tap_coordinates(self):
+        r = self.hamster_button.rect.copy()
+        self._tap_zone = {
+            'low_x': r['x'] + r['width'] // 4,
+            'upp_x': r['x'] + r['width'] // 4 * 3,
+            'low_y': r['y'] + r['height'] // 4,
+            'upp_y': r['y'] + r['height'] // 4 * 3
+        }
 
     def wait_for_loading(self, timeout=30):
         end_time = time.time() + timeout
