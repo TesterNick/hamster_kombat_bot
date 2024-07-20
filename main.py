@@ -14,6 +14,8 @@ from hamster_app import HamsterApp
 class MainApp:
 
     def __init__(self):
+        self.driver = None
+        self.service = None
         self.host = None
         self.port = None
         self.capabilities = {
