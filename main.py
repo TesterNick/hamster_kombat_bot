@@ -3,6 +3,8 @@ import datetime
 import logging
 import time
 
+from typing import Any
+
 from appium import webdriver
 from appium.options.android import UiAutomator2Options
 from appium.webdriver.appium_service import AppiumService
@@ -12,8 +14,12 @@ from hamster_app import HamsterApp
 
 
 class MainApp:
+    """
+    Class represents the main application.
+    It handles Appium infrastructure and controls mobile applications.
+    """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.driver = None
         self.service = None
         self.host = None
@@ -34,7 +40,10 @@ class MainApp:
         self.parse_config()
 
     @property
-    def appium_server_url(self):
+    def appium_server_url(self) -> str:
+        """
+        The property evaluates and caches the Appium server URL.
+        """
         logger.debug('Getting Appium server url')
         if not self._appium_server_url:
             self._appium_server_url = f'http://{self.host}:{self.port}'
@@ -50,7 +59,7 @@ class MainApp:
         options = UiAutomator2Options().load_capabilities(self.capabilities)
         self.driver = webdriver.Remote(self.appium_server_url, options=options)
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any):
         logger.debug('Locking the device')
         self.driver.lock()
         logger.debug('Quitting driver')
@@ -58,7 +67,10 @@ class MainApp:
         logger.debug('Stopping the Appium service')
         self.service.stop()
 
-    def parse_config(self):
+    def parse_config(self) -> None:
+        """
+        Read config file and pass parsed values to according fields.
+        """
         cfg = configparser.ConfigParser()
         cfg.read('config.ini')
         self.host = cfg.get('appium_service', 'host')
@@ -77,7 +89,14 @@ class MainApp:
         logger.debug(f'Config: {config}')
 
     @staticmethod
-    def sleep_with_timer(max_energy):
+    def sleep_with_timer(max_energy: int) -> None:
+        """
+        Do nothing but show in the console the rest time.
+        The time is evaluated according to the maximum energy value read
+        in the time of the last hamster run.
+
+        :param max_energy: maximum amount of energy available to the user
+        """
         sleep_time_by_energy = max_energy * 0.3
         timeout = sleep_time_by_energy if sleep_time_by_energy < 3599 else 3599
         end_time = time.time() + timeout
@@ -89,7 +108,10 @@ class MainApp:
         print('Running coin gathering...', end='\r')
         logger.info('Running coin gathering')
 
-    def tap_coins(self):
+    def tap_coins(self) -> int:
+        """
+        Initialise HamsterApp and do the stuff all this is made for.
+        """
         try:
             hamster = HamsterApp(self.driver)
         except TimeoutError:
