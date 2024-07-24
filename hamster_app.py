@@ -31,7 +31,7 @@ class HamsterApp:
     def boost_button(self):
         logger.debug('Getting Boost button')
         xpath = ('/*/android.view.View[1]/android.view.View[8]'
-                 '/android.view.View/android.widget.TextView')
+                 '/android.view.View/android.widget.TextView[@text="Boost"]')
         return self.root.find_element(by=AppiumBy.XPATH, value=xpath)
 
     @property
