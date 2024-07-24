@@ -1,4 +1,5 @@
 import logging
+import math
 import random
 import time
 
@@ -133,7 +134,7 @@ class HamsterApp:
             for _ in range(2):
                 self.do_random_tap()
             energy_after = self.get_energy()[0]
-            self.earn_per_tap = (cur_energy - energy_after) // 10
+            self.earn_per_tap = math.ceil((cur_energy - energy_after) / 10)
             logger.debug(f'{self.earn_per_tap=}')
             cur_energy = energy_after
         for _ in range(cur_energy // (self.earn_per_tap - 3) // 5):
