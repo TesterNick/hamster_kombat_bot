@@ -90,7 +90,13 @@ class MainApp:
         logger.info('Running coin gathering')
 
     def tap_coins(self):
-        hamster = HamsterApp(self.driver)
+        try:
+            hamster = HamsterApp(self.driver)
+        except TimeoutError:
+            # There may be some issues on the app server side, so
+            # just return a number and let sleep_with_timer work.
+            print('App is not loaded. Will try again in 5 minutes')
+            return 1000
         try:
             hamster.thank_you_button.click()
         except NoSuchElementException:
