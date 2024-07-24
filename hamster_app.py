@@ -94,7 +94,6 @@ class HamsterApp:
         return available_refills
 
     def get_energy(self):
-        logger.debug('Getting Energy')
         el_text = self.energy_element.text
         current_energy, max_energy = (int(n) for n in el_text.split(' / '))
         logger.debug(f'{current_energy=}, {max_energy=}')
