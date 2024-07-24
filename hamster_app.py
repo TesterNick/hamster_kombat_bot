@@ -172,6 +172,7 @@ class HamsterApp:
                 not_found += 1
                 if not_found == 3:
                     self.load()
+                    not_found = 0
             else:
                 if self.check_error_message():
                     return False
