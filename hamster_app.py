@@ -177,7 +177,7 @@ class HamsterApp:
                 if self.check_error_message():
                     return False
                 elif self.loading_screen:
-                    time.sleep(0.1)
+                    time.sleep(0.5)
                 else:
                     return True
         raise TimeoutError('App is not loaded')
