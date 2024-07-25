@@ -10,7 +10,7 @@ from appium.options.android import UiAutomator2Options
 from appium.webdriver.appium_service import AppiumService
 from selenium.common.exceptions import NoSuchElementException
 
-from hamster_app import HamsterApp
+from classes.hamster_app import HamsterApp
 
 
 class MainApp:
