@@ -1,6 +1,7 @@
 import configparser
 import datetime
 import logging
+import re
 import time
 
 from typing import Any
@@ -10,6 +11,7 @@ from appium.options.android import UiAutomator2Options
 from appium.webdriver.appium_service import AppiumService
 from selenium.common.exceptions import NoSuchElementException
 
+from classes.adb import Adb
 from classes.hamster_app import HamsterApp
 
 
@@ -37,6 +39,7 @@ class MainApp:
             'locale': 'US'
         }
         self._appium_server_url = None
+        self.adb = Adb()
         self.parse_config()
 
     @property
@@ -66,6 +69,31 @@ class MainApp:
         self.driver.quit()
         logger.debug('Stopping the Appium service')
         self.service.stop()
+
+    def check_connected_devices(self) -> None:
+        logger.info('Checking connected devices')
+        while True:
+            devices = self.adb.get_connected_devices()
+            if not devices:
+                logging.debug('No connected devices found')
+                input('Please connect the device with a cable and press Enter')
+                continue
+            elif len(devices) > 1:
+                input('Please disconnect the device and press Enter')
+                continue
+            name, status = devices[0]
+            logging.debug(f'Checking device {name}')
+            if re.match(r'(\d+\.){3}\d+:\d{4}', name):
+                if status == 'device':
+                    logging.debug(f'Found device {name}')
+                    return
+                else:
+                    self.adb.reconnect()
+                    continue
+            else:
+                self.adb.start_tcp()
+                self.adb.get_ip_address()
+                self.adb.connect()
 
     def parse_config(self) -> None:
         """
@@ -137,6 +165,7 @@ if __name__ == '__main__':
     logging.basicConfig(format=log_format, filename='hamster_bot.log',
                         encoding='utf-8', level=logging.NOTSET)
     app = MainApp()
+    app.check_connected_devices()
     while True:
         with app:
             maximum_energy = app.tap_coins()
