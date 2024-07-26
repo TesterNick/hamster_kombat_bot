@@ -9,7 +9,7 @@ Now you can sleep at night without any FOMO (fear of missing opportunities).
 
 ## Dependencies
 
-Order to work the bot requires:
+In order to work the bot requires:
 - an installed and configured Appium
 - configured and connected mobile device with installed Telegram
 - User should be registered in Hamster Kombat bot. If you only want to start,
@@ -60,7 +60,9 @@ I'm not an affiliated person, just a player like you.
 pip install -r requirements.txt
 ```
 Notes:
+
 [How to connect the device to computer](https://www.seleniumeasy.com/appium-tutorials/configure-appium-on-real-devices-android-to-execute-tests#google_vignette)
+
 [How to connect device through Wi-Fi](https://discuss.appium.io/t/tutorial-how-to-run-tests-on-real-android-device-remotely-through-wi-fi/1135)
 
 ## Conclusion
