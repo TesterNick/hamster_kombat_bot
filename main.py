@@ -113,6 +113,7 @@ class MainApp:
             self.capabilities['unlockType'] = unlock_type
             self.capabilities['unlockKey'] = pin
             pass
+        self.adb.ip = cfg.get('user_settings', 'ip_address').split(':')[0]
         config = {section: {k: v for k, v in cfg[section].items()}
                   for section in cfg.sections()}
         logger.debug(f'Config: {config}')

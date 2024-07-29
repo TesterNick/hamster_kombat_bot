@@ -13,7 +13,7 @@ ECHO Don\'t click "Cancel" button!
 SET /p ip=Please enter the device's "IP address & Port":
 SET /p code=Please enter "Wi-Fi pairing code":
 SET folder=%~dp0
-ECHO ipaddress = %ip%>>%folder%\config.ini
+ECHO ip_address = %ip%>>%folder%\config.ini
 docker exec hamster_bot adb pair %ip% %code%
 
 ECHO *********************************
