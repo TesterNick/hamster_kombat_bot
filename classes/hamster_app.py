@@ -28,7 +28,6 @@ class HamsterApp:
         while not self.wait_for_loading() and tries > 0:
             tries -= 1
             self.reload()
-        # print(self.driver.page_source)
 
     @property
     def boost_button(self) -> WebElement:
