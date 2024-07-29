@@ -77,7 +77,7 @@ class MainApp:
             devices = self.adb.get_connected_devices()
             if not devices:
                 logging.debug('No connected devices found')
-                input('Please connect the device with a cable and press Enter')
+                self.adb.connect()
                 continue
             elif len(devices) > 1:
                 input('Please disconnect the device and press Enter')
@@ -90,11 +90,6 @@ class MainApp:
                     return
                 else:
                     self.adb.reconnect()
-                    continue
-            else:
-                self.adb.start_tcp()
-                self.adb.get_ip_address()
-                self.adb.connect()
 
     def parse_config(self) -> None:
         """

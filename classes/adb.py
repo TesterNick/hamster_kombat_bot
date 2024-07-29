@@ -1,6 +1,5 @@
 import logging
 import os
-import re
 import subprocess
 import time
 
@@ -30,20 +29,6 @@ class Adb:
         out = self.run('devices')
         return [line.split() for line in out[1:]]
 
-    def get_ip_address(self) -> None:
-        """
-        Evaluates device ip address in the local network.
-        If the device is found, its ip is stored in the object field.
-        """
-        logging.debug(f'Evaluating device ip address')
-        out = self.run('shell ifconfig')
-        for line in out:
-            logging.debug(f'{line=}')
-            ips = re.findall(r'(?<=inet addr:)192\.168\.\d+\.\d+',
-                             line.strip())
-            if ips:
-                self.ip = ips[0]
-
     def reconnect(self) -> None:
         """
         Run adb reconnect command. Sometimes it is helpful,
@@ -69,12 +54,3 @@ class Adb:
         output = p.stdout.decode().split(os.linesep)
         logging.debug(f'{output=}')
         return [line.strip() for line in output if line.strip()]
-
-    def start_tcp(self) -> None:
-        """
-        Starts web-server on the device, so controlling computer can
-        establish the wireless connection.
-        """
-        logging.debug(f'Restarting in tcp mode')
-        self.run(f'tcpip {self.port}')
-        time.sleep(3)
