@@ -1,6 +1,7 @@
 import configparser
 import datetime
 import logging
+import os.path
 import re
 import time
 
@@ -100,7 +101,7 @@ class MainApp:
         Read config file and pass parsed values to according fields.
         """
         cfg = configparser.ConfigParser()
-        cfg.read('config.ini')
+        cfg.read(os.path.join(os.path.dirname(__file__), 'config.ini'))
         self.host = cfg.get('appium_service', 'host')
         self.port = cfg.get('appium_service', 'port')
         unlock_type = cfg.get('user_settings', 'unlock_type', fallback=None)
