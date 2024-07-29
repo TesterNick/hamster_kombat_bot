@@ -21,7 +21,7 @@ class Adb:
         """
         self.run(f'connect {self.ip}:{self.port}')
 
-    def get_connected_devices(self) -> list[list]:
+    def get_connected_devices(self) -> list:
         """
         Check devices connected via a cable as well as Wi-Fi.
         :return: list of lists. Each of them consists of 2 elements:
@@ -55,7 +55,7 @@ class Adb:
         time.sleep(1)
 
     @staticmethod
-    def run(command: str) -> list[str]:
+    def run(command: str) -> list:
         """
         Wrapper for subprocess.run. It gets a string and passes it to adb.
         The output is captured and all non-empty lines are returned as a list.

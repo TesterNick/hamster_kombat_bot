@@ -131,7 +131,7 @@ class MainApp:
         logger.debug(f'{max_energy=}. Sleeping for {int(timeout)} s')
         while time.time() < end_time:
             rest_time = datetime.datetime.fromtimestamp(end_time - time.time())
-            print(f'Next run in {rest_time.strftime('%M:%S')}', end='\r')
+            print(f'Next run in {rest_time.strftime("%M:%S")}', end='\r')
             time.sleep(1)
         print('Running coin gathering...', end='\r')
         logger.info('Running coin gathering')
@@ -163,7 +163,7 @@ if __name__ == '__main__':
     logger = logging.getLogger()
     log_format = '%(asctime)s %(name)s %(levelname)s:\n    %(message)s'
     logging.basicConfig(format=log_format, filename='hamster_bot.log',
-                        encoding='utf-8', level=logging.NOTSET)
+                        level=logging.NOTSET)
     app = MainApp()
     app.check_connected_devices()
     while True:

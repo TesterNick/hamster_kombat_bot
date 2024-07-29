@@ -3,6 +3,8 @@ import math
 import random
 import time
 
+from typing import Union
+
 from appium.webdriver import WebElement, Remote
 from appium.webdriver.common.appiumby import AppiumBy
 from selenium.common.exceptions import NoSuchElementException
@@ -78,7 +80,7 @@ class HamsterApp:
         return self.driver.find_element(by=AppiumBy.XPATH, value=xpath)
 
     @property
-    def loading_screen(self) -> WebElement | None:
+    def loading_screen(self) -> Union[WebElement, None]:
         """
         The screen which is shown while Hamster Kombat is loading.
         """
@@ -125,7 +127,7 @@ class HamsterApp:
         logger.debug(f'{available_refills=}')
         return available_refills
 
-    def get_energy(self) -> tuple[int, int]:
+    def get_energy(self) -> tuple:
         """
         Find the text showing energy and parse it.
 
