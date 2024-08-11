@@ -29,7 +29,6 @@ class MainApp:
         self.port = None
         self.capabilities = {
             'platformName': 'Android',
-            'deviceName': 'Android',
             'appPackage': 'org.telegram.messenger',
             'appActivity': '.DefaultIcon',
             'noReset': "true",
