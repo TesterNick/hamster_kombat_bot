@@ -29,7 +29,8 @@ class HamsterApp:
 
     def find_element(self, value: str, by: str = AppiumBy.XPATH) -> WebElement:
         """
-        Wrapper for self.root.find_element which makes 3 tries.
+        Wrapper for self.root.find_element which makes 10 tries to handle
+        long server response times.
 
         :param value: locator
         :param by: strategy to find an element
