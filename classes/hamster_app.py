@@ -41,6 +41,8 @@ class HamsterApp:
                 return self.root.find_element(by=by, value=value)
             except (NoSuchElementException, StaleElementReferenceException):
                 if i == tries:
+                    # Capability printPageSourceOnFindFailure does not work
+                    logger.debug(self.driver.page_source)
                     raise
                 else:
                     logger.debug(f'{i} try failed')
