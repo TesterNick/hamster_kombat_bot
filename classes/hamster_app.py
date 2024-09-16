@@ -35,7 +35,7 @@ class HamsterApp:
         :param by: strategy to find an element
         :return: corresponding WebElement
         """
-        tries = 3
+        tries = 10
         for i in range(1, tries + 1):
             try:
                 return self.root.find_element(by=by, value=value)
@@ -261,7 +261,7 @@ class HamsterApp:
             'upp_y': r['y'] + r['height'] // 4 * 3
         }
 
-    def wait_for_loading(self, timeout: int = 30) -> bool:
+    def wait_for_loading(self, timeout: int = 60) -> bool:
         """
         Wait while loading is over and handle possible errors
         on different stages.
