@@ -295,11 +295,8 @@ class HamsterApp:
         :return: if the refill was successful
         """
         self.boost_button.click()
-        time.sleep(1)
         if not self.check_refill_timer() and self.get_available_refills():
             self.refill_energy_element.click()
-            time.sleep(1)
             self.go_ahead_button.click()
-            time.sleep(1)
             return True
         return False
