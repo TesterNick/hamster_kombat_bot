@@ -147,6 +147,7 @@ class MainApp:
             # just return a number and let sleep_with_timer work.
             print('App is not loaded. Will try again in 5 minutes')
             return 1000
+        hamster.check_daily_reward()
         try:
             hamster.thank_you_button.click()
         except NoSuchElementException:

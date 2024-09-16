@@ -157,6 +157,25 @@ class HamsterApp:
         logger.debug(f'{current_energy=}, {max_energy=}')
         return current_energy, max_energy
 
+    def check_daily_reward(self) -> None:
+        """
+        Check daily reward screen. If there is the according image,
+        then find the collect button and click it. Otherwise, do nothing.
+
+        :return: None
+        """
+        logger.debug('Checking daily reward screen')
+        xpath = ('//android.view.View/android.view.View'
+                 '/android.widget.Image[@text="daily-reward"]')
+        try:
+            self.root.find_element(xpath)
+            button_xpath = ('//android.view.View/android.view.View'
+                            '/android.view.View/android.widget.Button')
+            self.find_element(button_xpath).click()
+        except NoSuchElementException:
+            pass
+
+
     def check_refill_timer(self) -> bool:
         """
         Find the text showing the cooldown time to the next refill.
