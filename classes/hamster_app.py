@@ -168,7 +168,7 @@ class HamsterApp:
         xpath = ('//android.view.View/android.view.View'
                  '/android.widget.Image[@text="daily-reward"]')
         try:
-            self.root.find_element(xpath)
+            self.root.find_element(by=AppiumBy.XPATH, value=xpath)
             button_xpath = ('//android.view.View/android.view.View'
                             '/android.view.View/android.widget.Button')
             self.find_element(button_xpath).click()
