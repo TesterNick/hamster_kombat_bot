@@ -5,7 +5,7 @@ import time
 
 from appium.webdriver import WebElement, Remote
 from appium.webdriver.common.appiumby import AppiumBy
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException
 
 
 logger = logging.getLogger()
@@ -27,6 +27,25 @@ class HamsterApp:
             tries -= 1
             self.reload()
 
+    def find_element(self, value: str, by: str = AppiumBy.XPATH) -> WebElement:
+        """
+        Wrapper for self.root.find_element which makes 3 tries.
+
+        :param value: locator
+        :param by: strategy to find an element
+        :return: corresponding WebElement
+        """
+        tries = 3
+        for i in range(1, tries + 1):
+            try:
+                return self.root.find_element(by=by, value=value)
+            except (NoSuchElementException, StaleElementReferenceException):
+                if i == tries:
+                    raise
+                else:
+                    logger.debug(f'{i} try failed')
+                    time.sleep(1)
+
     @property
     def boost_button(self) -> WebElement:
         """
@@ -35,7 +54,7 @@ class HamsterApp:
         logger.debug('Getting Boost button')
         xpath = ('/*/android.view.View[1]/android.view.View[8]'
                  '/android.view.View/android.widget.TextView[@text="Boost"]')
-        return self.root.find_element(by=AppiumBy.XPATH, value=xpath)
+        return self.find_element(xpath)
 
     @property
     def energy_element(self) -> WebElement:
@@ -45,7 +64,7 @@ class HamsterApp:
         logger.debug('Getting Energy element')
         xpath = ('/*/android.view.View[1]'
                  '/android.view.View[8]/android.widget.TextView')
-        return self.root.find_element(by=AppiumBy.XPATH, value=xpath)
+        return self.find_element(xpath)
 
     @property
     def go_ahead_button(self) -> WebElement:
@@ -55,7 +74,7 @@ class HamsterApp:
         logger.debug('Getting Go Ahead button')
         xpath = ('/*/android.view.View[3]/android.view.View'
                  '/android.view.View[2]/android.widget.Button')
-        return self.root.find_element(by=AppiumBy.XPATH, value=xpath)
+        return self.find_element(xpath)
 
     @property
     def hamster_button(self) -> WebElement:
@@ -65,7 +84,7 @@ class HamsterApp:
         logger.debug('Getting Hamster button')
         xpath = ('/*/android.view.View[1]/android.view.View[8]'
                  '/android.widget.Button')
-        return self.root.find_element(by=AppiumBy.XPATH, value=xpath)
+        return self.find_element(xpath)
 
     @property
     def error_message(self) -> WebElement:
@@ -97,7 +116,7 @@ class HamsterApp:
         """
         logger.debug('Getting refill energy button')
         xpath = '/*/android.view.View[1]/android.view.View[2]'
-        return self.root.find_element(by=AppiumBy.XPATH, value=xpath)
+        return self.find_element(xpath)
 
     @property
     def thank_you_button(self) -> WebElement:
@@ -108,7 +127,7 @@ class HamsterApp:
         logger.debug('Getting Thank You button')
         xpath = ('/*/android.view.View[3]/android.view.View'
                  '/android.view.View[2]/android.widget.Button')
-        return self.root.find_element(by=AppiumBy.XPATH, value=xpath)
+        return self.find_element(xpath)
 
     def get_available_refills(self) -> int:
         """
