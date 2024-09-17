@@ -170,9 +170,9 @@ class HamsterApp:
                  '/android.widget.Image[@text="daily-reward"]')
         try:
             self.root.find_element(by=AppiumBy.XPATH, value=xpath)
-            button_xpath = ('//android.view.View/android.view.View'
-                            '/android.view.View/android.widget.Button')
-            self.find_element(button_xpath).click()
+            xpath = ('//android.view.View/android.view.View'
+                     '/android.view.View/android.widget.Button[@text="Claim"]')
+            self.find_element(xpath).click()
         except NoSuchElementException:
             pass
 
